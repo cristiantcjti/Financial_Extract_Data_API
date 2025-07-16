@@ -6,8 +6,7 @@ from src.integration.routes.base import BaseRoute
 
 
 class DynamicClientRoute(BaseRoute):
-
-    def __init__(self, data: dict[str, Any]):
+    def __init__(self, data: dict[str, Any]) -> None:
         super().__init__()
         self._name = data.get("name")
         self._organization_name = data.get("organization_name")
@@ -32,5 +31,3 @@ class DynamicClientRoute(BaseRoute):
             "organization_id": self._organization_id,
             "organization_type": self._organization_type,
         }
-
-

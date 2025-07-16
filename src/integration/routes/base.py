@@ -2,6 +2,8 @@ from typing import Any
 
 import requests
 from requests import HTTPError, Response
+from requests.exceptions import ConnectionError as RequestsConnectionError
+from requests.exceptions import RequestException, Timeout
 
 from src.config.logging import logger
 from src.integration.dtos.integration_dtos import IntegrationResultDTO
@@ -87,9 +89,23 @@ class BaseRoute:
                 f"payload: {payload} "
             )
             raise
+        except (
+            RequestException,
+            RequestsConnectionError,
+            Timeout,
+            AttributeError,
+        ) as err:
+            logger.exception(
+                msg=f"Request or attribute error in {self.__class__.__name__}, "
+                f"method: {method}, "
+                f"url: {url}, "
+                f"payload: {payload}"
+                f"traceback: {err}"
+            )
+            raise
         except Exception as err:
             logger.exception(
-                msg=f"Error in {self.__class__.__name__}, "
+                msg=f"Unexpected error in {self.__class__.__name__}, "
                 f"method: {method}, "
                 f"url: {url}, "
                 f"payload: {payload}"

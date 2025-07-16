@@ -88,13 +88,13 @@ Before you begin, ensure you have the following installed on your system:
      curl -fsSL https://get.docker.com -o get-docker.sh
      sudo sh get-docker.sh
      sudo apt-get install docker-compose-plugin
-     
+
      # Or use your distribution's package manager
      ```
    - Verify installation: `docker --version` and `docker-compose --version`
 
 2. **UV (Fast Python Package Manager)**
-   - **Windows**: 
+   - **Windows**:
      ```powershell
      powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
      ```
@@ -129,7 +129,7 @@ Follow these steps to get the application running quickly using Docker:
    # Pull and run the OFDA API that our service depends on
    docker pull gniparcs/ofda-engineer-test
    docker run -d -p 8000:8000 --name ofda-api gniparcs/ofda-engineer-test
-   
+
    # Verify OFDA API is running
    curl http://localhost:8000/health
    ```
@@ -138,7 +138,7 @@ Follow these steps to get the application running quickly using Docker:
    ```bash
    # Start all services in detached mode (runs in background)
    docker-compose up -d
-   
+
    # Check that all containers are running healthy
    docker-compose ps
    ```
@@ -147,7 +147,7 @@ Follow these steps to get the application running quickly using Docker:
    ```bash
    # Check API health endpoint
    curl http://localhost:8001/api/v1/health
-   
+
    # View API documentation in browser
    # Visit: http://localhost:8001/api/v1/docs
    ```
@@ -244,7 +244,7 @@ For development work, you may want to run the application locally with a Python 
    ```bash
    # Create a new virtual environment using UV
    uv venv
-   
+
    # Activate the virtual environment
    # On Windows:
    .venv\Scripts\activate
@@ -256,7 +256,7 @@ For development work, you may want to run the application locally with a Python 
    ```bash
    # Install all dependencies from pyproject.toml
    uv sync
-   
+
    # Or install with development dependencies
    uv sync --dev
    ```
@@ -272,7 +272,7 @@ For development work, you may want to run the application locally with a Python 
    ```bash
    # Start only the database and cache services
    docker-compose up redis -d
-   
+
    # Verify services are running
    docker-compose ps
    ```
@@ -280,7 +280,7 @@ For development work, you may want to run the application locally with a Python 
    ```bash
    # Run the Django development server
    python manage.py runserver
-   
+
    # The API will be available at http://localhost:8000
    ```
 
@@ -414,15 +414,15 @@ Logs are structured and include:
    # Check Docker is running
    docker --version
    docker-compose --version
-   
+
    # Check if ports are already in use
    netstat -an | grep :8001  # Check if port 8001 is taken
    netstat -an | grep :6379  # Check if Redis port is taken
-   
+
    # Stop conflicting services
    docker-compose down
    docker stop $(docker ps -q)  # Stop all running containers
-   
+
    # Restart with clean state
    docker-compose up -d --force-recreate
    ```
@@ -432,10 +432,10 @@ Logs are structured and include:
    # Check container logs
    docker-compose logs financial-api
    docker-compose logs redis
-   
+
    # Check container status
    docker-compose ps
-   
+
    # Restart specific service
    docker-compose restart financial-api
    ```
@@ -445,7 +445,7 @@ Logs are structured and include:
    # Fix Docker socket permissions
    sudo usermod -aG docker $USER
    # Log out and back in for changes to take effect
-   
+
    # Fix file permissions
    sudo chown -R $USER:$USER .
    ```
@@ -456,10 +456,10 @@ Logs are structured and include:
    ```bash
    # Check OFDA API is running
    curl http://localhost:8000/health
-   
+
    # If not running, start it
    docker run -d -p 8000:8000 --name ofda-api gniparcs/ofda-engineer-test
-   
+
    # Check Docker network connectivity
    docker network ls
    docker inspect bridge
@@ -469,13 +469,13 @@ Logs are structured and include:
    ```bash
    # Verify Redis is running
    docker-compose ps redis
-   
+
    # Test Redis connectivity
    docker-compose exec redis redis-cli ping
-   
+
    # Clear cache if needed
    docker-compose exec financial-api python manage.py shell -c "from django.core.cache import cache; cache.clear()"
-   
+
    # Check Redis logs
    docker-compose logs redis
    ```
@@ -486,10 +486,10 @@ Logs are structured and include:
    ```bash
    # Reinstall UV
    curl -LsSf https://astral.sh/uv/install.sh | sh
-   
+
    # Add to PATH (if needed)
    export PATH="$HOME/.cargo/bin:$PATH"
-   
+
    # Restart terminal and verify
    uv --version
    ```
@@ -499,11 +499,11 @@ Logs are structured and include:
    # Recreate virtual environment
    rm -rf .venv
    uv venv
-   
+
    # Activate (ensure you're in project directory)
    source .venv/bin/activate  # macOS/Linux
    .venv\Scripts\activate     # Windows
-   
+
    # Verify activation
    which python  # Should point to .venv/bin/python
    ```
@@ -512,10 +512,10 @@ Logs are structured and include:
    ```bash
    # Clear UV cache
    uv cache clean
-   
+
    # Reinstall dependencies
    uv sync --reinstall
-   
+
    # Install with verbose output for debugging
    uv sync --verbose
    ```
@@ -585,7 +585,7 @@ docker volume prune               # Remove unused volumes
    ```bash
    # Application logs
    docker-compose logs financial-api
-   
+
    # OFDA API logs
    docker logs ofda-api
    ```
@@ -594,7 +594,7 @@ docker volume prune               # Remove unused volumes
    ```bash
    # Stable testing
    docker run -d -p 8000:8000 -e INSTABILITY_PROBABILITY=0.0 --name ofda-api-stable gniparcs/ofda-engineer-test
-   
+
    # High instability testing
    docker run -d -p 8000:8000 -e INSTABILITY_PROBABILITY=0.5 --name ofda-api-unstable gniparcs/ofda-engineer-test
    ```

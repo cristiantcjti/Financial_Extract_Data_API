@@ -1,6 +1,7 @@
 """
 Django settings for financial-api project.
 """
+
 from datetime import timedelta
 from pathlib import Path
 
@@ -8,11 +9,15 @@ from decouple import Csv, config
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = config("SECRET_KEY", default="django-insecure-change-me-in-production")
+SECRET_KEY = config(
+    "SECRET_KEY", default="django-insecure-change-me-in-production"
+)
 
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1", cast=Csv())
+ALLOWED_HOSTS = config(
+    "ALLOWED_HOSTS", default="localhost,127.0.0.1", cast=Csv()
+)
 
 ENVIRONMENT = config("ENVIRONMENT", default="development")
 
@@ -35,10 +40,7 @@ THIRD_PARTY_APPS = [
     "health_check.contrib.redis",
 ]
 
-LOCAL_APPS = [
-    "src.core",
-    "src.financial"
-]
+LOCAL_APPS = ["src.core", "src.financial"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -202,11 +204,14 @@ LOGGING = {
 
 HEALTH_CHECK = {
     "DISK_USAGE_MAX": 90,  # percent
-    "MEMORY_MIN": 100,    # MB
+    "MEMORY_MIN": 100,  # MB
 }
 
 # OFDA API Configuration
-OFDA_API_BASE_URL = config("OFDA_API_BASE_URL", default="http://localhost:8000")
+OFDA_API_BASE_URL = config(
+    "OFDA_API_BASE_URL", default="http://localhost:8000"
+)
 OFDA_API_TIMEOUT = config("OFDA_API_TIMEOUT", default=30, cast=int)
-OFDA_API_RETRY_ATTEMPTS = config("OFDA_API_RETRY_ATTEMPTS", default=5, cast=int)
-
+OFDA_API_RETRY_ATTEMPTS = config(
+    "OFDA_API_RETRY_ATTEMPTS", default=5, cast=int
+)

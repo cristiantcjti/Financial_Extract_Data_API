@@ -1,10 +1,14 @@
 from datetime import datetime
 
-from ninja import Schema, Field
+from ninja import Field, Schema
 
 
 class ExtractionRequestSchema(Schema):
-    user_document: str = Field(..., min_length=11, description="User document must be at least 11 characters")
+    user_document: str = Field(
+        ...,
+        min_length=11,
+        description="User document must be at least 11 characters",
+    )
 
 
 class TransactionSchema(Schema):
@@ -48,7 +52,7 @@ class FinancialDataResponseSchema(Schema):
 class ErrorResponseSchema(Schema):
     error_code: str
     error_message: str
-    details: str = None
+    details: str | None = None
 
 
 class HealthCheckSchema(Schema):

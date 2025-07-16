@@ -2,20 +2,21 @@ import logging
 import time
 from collections.abc import Callable
 from functools import wraps
+from typing import Any
+
 
 def retry_with_backoff(
     max_retries: int = 3,
     backoff_increment: int = 5,
-    logger: logging.Logger = None
-):
-    """Decorator version of retry with backoff."""
+    logger: logging.Logger | None = None,
+) -> Callable[[Callable], Callable]:
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             nonlocal logger
-            if logger is None and args and hasattr(args[0], '_logger'):
+            if logger is None and args and hasattr(args[0], "_logger"):
                 logger = args[0]._logger
-            elif logger is None:
+            if logger is None:
                 logger = logging.getLogger(__name__)
 
             for attempt in range(max_retries + 1):
@@ -36,5 +37,7 @@ def retry_with_backoff(
                             f"Final error: {e}"
                         )
                         raise
+
         return wrapper
+
     return decorator

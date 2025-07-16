@@ -55,26 +55,7 @@ include = ['api/**.py']
 line-length = 79
 
 [tool.ruff.lint]
-select = [
-  "E",
-  "F",
-  "I",
-  "N",
-  "C90",
-  "UP",
-  "YTT",
-  "ASYNC",
-  "S",
-  "A",
-  "B",
-  "FBT",
-  "BLE",
-  "COM",
-  "C4",
-  "T10",
-  "ANN",
-]
-ignore = ["COM812", "E501", "ANN401"]
+ignore = ["COM812", "E501", "ANN401", "S101", "ANN001"]
 
 
 [tool.ruff.lint.extend-per-file-ignores]

@@ -1,9 +1,9 @@
-import pytest
 from datetime import datetime
-from unittest.mock import Mock, MagicMock, patch
-import json
+from unittest.mock import MagicMock, Mock, patch
 
+import pytest
 from django.test import RequestFactory
+
 from src.financial.schemas.schemas import ExtractionRequestSchema
 
 
@@ -22,17 +22,13 @@ def sample_account_data():
         "id": "account-123",
         "account_type": "checking",
         "account_status": "active",
-        "balance": 1500.75
+        "balance": 1500.75,
     }
 
 
 @pytest.fixture
 def sample_balance_data():
-    return {
-        "account_id": "account-123",
-        "balance": 1500.75,
-        "currency": "BRL"
-    }
+    return {"account_id": "account-123", "balance": 1500.75, "currency": "BRL"}
 
 
 @pytest.fixture
@@ -45,7 +41,7 @@ def sample_transaction_data():
         "transaction_amount": 500.00,
         "transaction_direction": "in",
         "transaction_description": "Salary deposit",
-        "transaction_date": "2025-01-15T10:30:00Z"
+        "transaction_date": "2025-01-15T10:30:00Z",
     }
 
 
@@ -56,24 +52,21 @@ def sample_accounts_response():
             {
                 "id": "account-123",
                 "account_type": "checking",
-                "account_status": "active"
+                "account_status": "active",
             },
             {
-                "id": "account-456", 
+                "id": "account-456",
                 "account_type": "savings",
-                "account_status": "active"
-            }
+                "account_status": "active",
+            },
         ],
-        "has_next": False
+        "has_next": False,
     }
 
 
 @pytest.fixture
 def sample_balances_response():
-    return {
-        "balance": 1500.75,
-        "currency": "BRL"
-    }
+    return {"balance": 1500.75, "currency": "BRL"}
 
 
 @pytest.fixture
@@ -87,10 +80,10 @@ def sample_transactions_response():
                 "transaction_amount": 500.00,
                 "transaction_direction": "in",
                 "transaction_description": "Salary deposit",
-                "transaction_date": "2025-01-15T10:30:00Z"
+                "transaction_date": "2025-01-15T10:30:00Z",
             }
         ],
-        "has_next": False
+        "has_next": False,
     }
 
 
@@ -100,7 +93,7 @@ def sample_client_response():
         "client_id": "client-789",
         "client_secret": "secret-xyz",
         "client_name": "Test Client",
-        "expires_at": "2025-12-31T23:59:59Z"
+        "expires_at": "2025-12-31T23:59:59Z",
     }
 
 
@@ -110,7 +103,7 @@ def sample_consent_response():
         "consent_id": "consent-abc",
         "token": "token-def",
         "status": "active",
-        "expires_at": "2025-12-31T23:59:59Z"
+        "expires_at": "2025-12-31T23:59:59Z",
     }
 
 
@@ -122,6 +115,7 @@ def mock_http_response():
         response.status_code = status_code
         response.ok = status_code < 400
         return response
+
     return _create_response
 
 
@@ -135,10 +129,7 @@ def sample_formatted_response():
                 "account_id": "account-123",
                 "account_type": "CHECKING",
                 "account_status": "ACTIVE",
-                "balance": {
-                    "amount": 1500.75,
-                    "currency": "BRL"
-                },
+                "balance": {"amount": 1500.75, "currency": "BRL"},
                 "transactions": [
                     {
                         "transaction_id": "transaction-456",
@@ -148,17 +139,17 @@ def sample_formatted_response():
                         "currency": "BRL",
                         "direction": "IN",
                         "description": "Salary deposit",
-                        "date": datetime.now().isoformat()
+                        "date": datetime.now().isoformat(),
                     }
-                ]
+                ],
             }
         ],
         "summary": {
             "total_accounts": 1,
             "total_transactions": 1,
             "processing_time_ms": 1500,
-            "errors": []
-        }
+            "errors": [],
+        },
     }
 
 
@@ -167,7 +158,7 @@ def cache_test_data():
     return {
         "key": "test_key",
         "data": {"test": "data", "number": 123},
-        "timeout": 300
+        "timeout": 300,
     }
 
 
@@ -202,45 +193,58 @@ def valid_request_data():
 
 @pytest.fixture
 def mock_dependencies():
-    with patch('src.financial.services.extraction_service.ConsentService') as mock_consent, \
-         patch('src.financial.services.extraction_service.RouterService') as mock_router, \
-         patch('src.financial.services.extraction_service.CacheService') as mock_cache:
-        
+    with (
+        patch(
+            "src.financial.services.extraction_service.ConsentService"
+        ) as mock_consent,
+        patch(
+            "src.financial.services.extraction_service.RouterService"
+        ) as mock_router,
+        patch(
+            "src.financial.services.extraction_service.CacheService"
+        ) as mock_cache,
+    ):
         mock_consent_instance = Mock()
         mock_router_instance = Mock()
         mock_cache_instance = Mock()
-        
+
         mock_consent.return_value = mock_consent_instance
         mock_router.return_value = mock_router_instance
         mock_cache.return_value = mock_cache_instance
-        
+
         yield {
-            'consent': mock_consent_instance,
-            'router': mock_router_instance,
-            'cache': mock_cache_instance
+            "consent": mock_consent_instance,
+            "router": mock_router_instance,
+            "cache": mock_cache_instance,
         }
 
 
 @pytest.fixture
 def extraction_service(mock_dependencies):
     from src.financial.services.extraction_service import ExtractionService
+
     return ExtractionService()
 
 
 @pytest.fixture
 def mock_services():
-    with patch('src.financial.controllers.extract_financial_data.DynamicClientService') as mock_client_service, \
-         patch('src.financial.controllers.extract_financial_data.ExtractionService') as mock_extraction_service:
-        
+    with (
+        patch(
+            "src.financial.controllers.extract_financial_data.DynamicClientService"
+        ) as mock_client_service,
+        patch(
+            "src.financial.controllers.extract_financial_data.ExtractionService"
+        ) as mock_extraction_service,
+    ):
         mock_client_instance = Mock()
         mock_extraction_instance = Mock()
-        
+
         mock_client_service.return_value = mock_client_instance
         mock_extraction_service.return_value = mock_extraction_instance
-        
+
         yield {
-            'client_service': mock_client_instance,
-            'extraction_service': mock_extraction_instance
+            "client_service": mock_client_instance,
+            "extraction_service": mock_extraction_instance,
         }
 
 
@@ -252,7 +256,7 @@ def mock_route_data():
         "account_id": "account-123",
         "user_document": "12345678901",
         "page": 1,
-        "limit": 10
+        "limit": 10,
     }
 
 
@@ -263,5 +267,5 @@ def mock_client_data():
         "organization_name": "Test Org",
         "organization_id": "org-123",
         "organization_type": "INDIVIDUAL",
-        "operation": "POST"
+        "operation": "POST",
     }

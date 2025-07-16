@@ -6,7 +6,7 @@ from src.integration.routes.base import BaseRoute
 
 
 class BalancesRoute(BaseRoute):
-    def __init__(self, data: dict[str, Any]):
+    def __init__(self, data: dict[str, Any]) -> None:
         super().__init__()
         self._token = data.get("token")
         self._account_id = data.get("account_id")

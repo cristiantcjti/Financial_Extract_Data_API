@@ -6,7 +6,7 @@ from src.integration.routes.base import BaseRoute
 
 
 class AccountsRoute(BaseRoute):
-    def __init__(self, data: dict[str, Any]):
+    def __init__(self, data: dict[str, Any]) -> None:
         super().__init__()
         self._account_id = data.get("account_id")
         self._token = data.get("token", "")
@@ -33,4 +33,3 @@ class AccountsRoute(BaseRoute):
 
     def get_payload(self) -> dict[str, Any]:
         return {}
-
